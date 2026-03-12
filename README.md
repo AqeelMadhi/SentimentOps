@@ -65,8 +65,12 @@ poetry run ruff check .
 
 | Layer | Status |
 |---|---|
-| Data Engineering | 🚧 In Progress |
-| Modelling | ⏳ Planned |
-| MLOps | ⏳ Planned |
-| Serving | ⏳ Planned |
-| Frontend | ⏳ Planned |
+| Data Engineering | In Progress |
+| Modelling | Planned |
+| MLOps |  Planned |
+| Serving | Planned |
+| Frontend | Planned |
+
+
+## Archtecture Decision Records
+[Architecture Decision Records](docs/adr/)
