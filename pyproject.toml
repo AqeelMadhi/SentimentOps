@@ -24,7 +24,9 @@ dvc = "^3.0.0"
 feast = "^0.38.0"
 pyarrow = "^15.0.0"
 requests = "^2.31.0"
+datasets = "^2.18.0"
 dvc-azure = "^3.1.0"
+
 
 [tool.poetry.group.ml.dependencies]
 # ML/training layer — modelling, tuning, explainability
