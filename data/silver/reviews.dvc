@@ -1,0 +1,6 @@
+outs:
+- md5: 4c5f44d2b0890007fe17da7f16ce2733.dir
+  size: 5687324
+  nfiles: 4
+  hash: md5
+  path: reviews
