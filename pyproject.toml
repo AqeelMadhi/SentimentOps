@@ -34,7 +34,6 @@ numpy = "^1.26.0"
 scikit-learn = "^1.4.0"
 transformers = "^4.38.0"
 torch = "^2.2.0"
-datasets = "^2.18.0"
 optuna = "^3.5.0"
 shap = "^0.44.0"
 mlflow = "^2.11.0"
@@ -68,8 +67,9 @@ line-length = 88
 target-version = "py310"
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "W"]
+select = ["N", "B", "UP", "E", "F", "I", "W"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 asyncio_mode = "auto"
+pythonpath = ["."]
