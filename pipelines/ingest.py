@@ -1,7 +1,7 @@
 import os
 
 import polars as pl
-from datasets import load_dataset
+from datasets import load_dataset, Dataset
 from deltalake.writer import write_deltalake
 from dotenv import load_dotenv
 from loguru import logger
@@ -9,7 +9,7 @@ from loguru import logger
 load_dotenv()
 
 
-def prepare_individual_dataset(dataset, category):
+def prepare_individual_dataset(dataset: Dataset, category: str) -> pl.DataFrame:
     df = dataset.to_polars()
     df = df.with_columns(pl.lit(category).alias("category"))
     logger.info(f"Ingested {df.height} rows for category {category}")
@@ -26,13 +26,16 @@ def ingest_data():
         raise ValueError("Dataset Name not specified in environment variables")
     if not os.getenv("BRONZE_PATH"):
         raise ValueError("Bronze dataset path not specified in environment variables")
+
     try:
         categories = os.getenv("CATEGORIES").split(",")
         dfs = []
-        row_limit = os.getenv("BRONZE_ROW_LIMIT")
-        if row_limit:
-            logger.warning("Row limit applied - running in dev mode")
-            split = f"full[:{row_limit}]"
+        if os.getenv("BRONZE_ROW_LIMIT"):
+            if os.getenv("BRONZE_ROW_LIMIT").isdigit():
+                logger.warning("Row limit applied - running in dev mode")
+                split = f"full[:{os.getenv('BRONZE_ROW_LIMIT')}]"
+            else:
+                raise ValueError("Bronze Row Limit is not a valid integer")
         else:
             split = "full"
         for category in categories:
@@ -51,8 +54,10 @@ def ingest_data():
         write_deltalake(
             os.getenv("BRONZE_PATH"), dataset_to_be_written.to_arrow(), mode="overwrite"
         )
+        logger.info("Successfully ingested data")
     except Exception:
         logger.exception("Data Ingestion Failed")
+        raise
 
 
 if __name__ == "__main__":

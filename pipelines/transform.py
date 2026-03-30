@@ -26,13 +26,26 @@ def delete_unnecessary_columns(
 
 
 def drop_nulls(df: pl.DataFrame, critical_columns: list) -> pl.DataFrame:
+    num_rows = df.height
+    df = df.drop_nulls(subset=critical_columns)
+    num_rows_post_transformation = df.height
+    if 1 - (num_rows_post_transformation / num_rows) > ACCEPTABLE_DATA_LOSS_THRESHOLD:
+        raise RuntimeError(
+            "Too many rows were removed as a result of the drop nulls step"
+        )
 
-    return df.drop_nulls(subset=critical_columns)
+    return df
 
 
 def remove_duplicates(df: pl.DataFrame, dedup_keys: list) -> pl.DataFrame:
-
-    return df.unique(subset=dedup_keys)
+    num_rows = df.height
+    df = df.unique(subset=dedup_keys)
+    num_rows_post_transformation = df.height
+    if 1 - (num_rows_post_transformation / num_rows) > ACCEPTABLE_DATA_LOSS_THRESHOLD:
+        raise RuntimeError(
+            "Too many rows were removed as a result of the remove duplicates step"
+        )
+    return df
 
 
 def basic_text_cleaning(df: pl.DataFrame) -> pl.DataFrame:
@@ -61,26 +74,8 @@ def transform():
         unnecessary_columns_to_drop = os.getenv("BRONZE_COLUMNS_TO_DROP").split(",")
         critical_columns = os.getenv("SILVER_CRITICAL_COLUMNS").split(",")
         dedup_keys = os.getenv("SILVER_DEDUP_KEYS").split(",")
-        num_rows = df.height
         df = drop_nulls(df, critical_columns)
-        num_rows_post_transformation = df.height
-        if (
-            1 - (num_rows_post_transformation / num_rows)
-            >= ACCEPTABLE_DATA_LOSS_THRESHOLD
-        ):
-            raise RuntimeError(
-                "Too many rows were removed as a result of the drop nulls step"
-            )
-        num_rows = df.height
         df = remove_duplicates(df, dedup_keys)
-        num_rows_post_transformation = df.height
-        if (
-            1 - (num_rows_post_transformation / num_rows)
-            >= ACCEPTABLE_DATA_LOSS_THRESHOLD
-        ):
-            raise RuntimeError(
-                "Too many rows were removed as a result of the remove duplicates step"
-            )
         df = convert_data_types(df)
         df = basic_text_cleaning(df)
         df = delete_unnecessary_columns(df, unnecessary_columns_to_drop)
@@ -90,8 +85,14 @@ def transform():
             delta_write_options={"schema_mode": "overwrite"},
         )
         logger.info(f"Successfully wrote {df.height} rows to silver layer")
+    except RuntimeError:
+        logger.exception(
+            "Data quality issue, too many records were removed from the data during the silver transformation"
+        )
+        raise
     except Exception:
         logger.exception("Silver transformation pipeline failed")
+        raise
 
 
 if __name__ == "__main__":

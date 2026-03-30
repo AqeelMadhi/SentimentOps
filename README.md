@@ -54,6 +54,9 @@ poetry install --with data
 poetry install --with ml
 poetry install --with api
 
+# Configure pre commit setup
+pre commit install
+
 # Run tests
 poetry run pytest
 

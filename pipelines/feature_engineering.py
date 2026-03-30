@@ -36,6 +36,7 @@ def engineer():
         logger.info(f"Successfully wrote {df.height} rows to gold layer")
     except Exception:
         logger.exception("Gold transformation failed")
+        raise
 
 
 if __name__ == "__main__":

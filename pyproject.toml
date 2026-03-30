@@ -9,13 +9,12 @@ package-mode = false
 
 [tool.poetry.dependencies]
 # Root dependencies — needed across every layer
-python = "^3.10"
+python = "^3.11"
 python-dotenv = "^1.0.0"
 loguru = "^0.7.0"
 
 [tool.poetry.group.data.dependencies]
 # Data engineering layer — pipelines, transforms, validation
-pandas = "^2.0.0"
 polars = "^0.20.0"
 duckdb = "^0.10.0"
 deltalake = "^0.17.0"
@@ -68,7 +67,7 @@ target-version = "py310"
 exclude = ["notebooks", "*.ipynb"]
 
 [tool.ruff.lint]
-select = ["N", "B", "UP", "E", "F", "I", "W"]
+select = ["N", "B", "UP", "E", "F", "I", "W" , "ANN", "TRY", "EM"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

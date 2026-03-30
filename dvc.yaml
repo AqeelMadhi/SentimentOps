@@ -1,0 +1,24 @@
+stages:
+  bronze: 
+    cmd:
+      poetry run python -m pipelines.ingest
+    deps:
+      - pipelines/ingest.py
+    outs:
+      - data/bronze/reviews
+  silver:
+    cmd:
+      poetry run python -m pipelines.transform
+    deps: 
+      - data/bronze/reviews
+      - pipelines/transform.py
+    outs:
+      - data/silver/reviews
+  gold:
+    cmd:
+      poetry run python -m pipelines.feature_engineering
+    deps:
+      - data/silver/reviews
+      - pipelines/feature_engineering.py
+    outs:
+      - data/gold/reviews_ml
