@@ -5,7 +5,7 @@
 ## Architecture
 
 ```
-Raw Data → Bronze → Silver → Gold → Feature Store
+           Raw Data → Bronze → Silver → Gold
                                          ↓
                                Training Pipeline
                                          ↓
@@ -26,7 +26,6 @@ Raw Data → Bronze → Silver → Gold → Feature Store
 sentimentops/
 ├── data/                    # DVC-tracked, Delta Lake bronze/silver/gold
 ├── pipelines/               # Ingestion, transform, feature engineering
-├── features/                # Feast feature store definitions
 ├── training/                # Baseline, fine-tuning, evaluation
 ├── api/                     # FastAPI application
 ├── monitoring/              # Prometheus metrics, Grafana dashboards
@@ -41,7 +40,7 @@ sentimentops/
 
 | Layer | Tools |
 |---|---|
-| Data Engineering | DuckDB, Polars, Delta Lake, DVC, Great Expectations, Feast |
+| Data Engineering | DuckDB, Polars, Delta Lake, DVC, Great Expectations|
 | Modelling | DistilBERT, scikit-learn, Optuna, SHAP, MLflow |
 | MLOps | MLflow, Azure ML, GitHub Actions, Docker |
 | Serving | FastAPI, Redis, Prometheus, Grafana, Render |

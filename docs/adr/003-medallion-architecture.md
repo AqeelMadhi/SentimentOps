@@ -33,7 +33,6 @@ We adopt the **Medallion Architecture** with three distinct layers: Bronze, Silv
 - Produced by applying feature engineering transforms to Silver
 - Contains model-ready features: tokenised text, encoded labels, derived features (review length, sentiment score bins, etc.)
 - Optimised for training and serving consumption
-- Feast feature store reads from this layer
 - Format: Delta Lake table
 - Purpose: separates feature engineering logic from model training logic, enabling feature reuse
 
