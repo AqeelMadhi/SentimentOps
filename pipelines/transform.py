@@ -55,7 +55,7 @@ def basic_text_cleaning(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
-def transform():
+def transform() -> None:
     logger.info("Starting Silver Transformation")
     if not os.getenv("BRONZE_PATH"):
         raise ValueError("Bronze Path Environment Variable doesnt exist")
@@ -87,7 +87,7 @@ def transform():
         logger.info(f"Successfully wrote {df.height} rows to silver layer")
     except RuntimeError:
         logger.exception(
-            "Data quality issue, too many records were removed from the data during the silver transformation"
+            "Too many records were removed during the silver transformation"
         )
         raise
     except Exception:

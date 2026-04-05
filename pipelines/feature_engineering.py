@@ -4,7 +4,6 @@ import polars as pl
 from dotenv import load_dotenv
 from loguru import logger
 
-
 load_dotenv()
 
 
@@ -31,7 +30,7 @@ def create_word_count(df: pl.DataFrame, column_name: str) -> pl.DataFrame:
     )
 
 
-def engineer():
+def engineer() -> None:
     logger.info("Gold transformation started")
     if not os.getenv("GOLD_PATH"):
         raise ValueError("Gold path doesnt exist")

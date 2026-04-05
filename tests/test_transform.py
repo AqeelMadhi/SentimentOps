@@ -1,8 +1,8 @@
 import polars as pl
 import pytest
 
-from pipelines.transform import drop_nulls
-from pipelines.transform import remove_duplicates
+from pipelines.transform import drop_nulls, remove_duplicates
+
 
 @pytest.fixture
 def create_fake_dataset_with_nulls() -> pl.DataFrame:
@@ -85,13 +85,13 @@ def test_drop_nulls_when_nulls_raises_runtime_error(create_fake_dataset_with_nul
     df=create_fake_dataset_with_nulls
     with pytest.raises(RuntimeError):
         drop_nulls(df, ["text","rating"])
-    
+
 def test_remove_duplicates_when_duplicates(create_fake_dataset_with_one_duplicate):
     df = create_fake_dataset_with_one_duplicate
     num_rows = df.height
     result = remove_duplicates(df, ["user_id", "parent_asin"]).height
     assert result == num_rows - 1
-    
+
 def test_remove_duplicates_without_duplicates(create_fake_dataset_without_duplicates):
     df = create_fake_dataset_without_duplicates
     num_rows = df.height
