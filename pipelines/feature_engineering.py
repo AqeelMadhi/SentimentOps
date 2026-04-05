@@ -27,7 +27,7 @@ def create_text_length(df: pl.DataFrame, column_name: str) -> pl.DataFrame:
 
 def create_word_count(df: pl.DataFrame, column_name: str) -> pl.DataFrame:
     return df.with_columns(
-        pl.col(column_name).split(" ").list.len().alias(f"{column_name}_word_count")
+        pl.col(column_name).str.split(" ").list.len().alias(f"{column_name}_word_count")
     )
 
 
