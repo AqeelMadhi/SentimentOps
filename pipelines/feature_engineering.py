@@ -19,6 +19,18 @@ def create_sentiment_label(df: pl.DataFrame) -> pl.DataFrame:
     )
 
 
+def create_text_length(df: pl.DataFrame, column_name: str) -> pl.DataFrame:
+    return df.with_columns(
+        pl.col(column_name).str.len_chars().alias(f"{column_name}_text_length")
+    )
+
+
+def create_word_count(df: pl.DataFrame, column_name: str) -> pl.DataFrame:
+    return df.with_columns(
+        pl.col(column_name).split(" ").list.len().alias(f"{column_name}_word_count")
+    )
+
+
 def engineer():
     logger.info("Gold transformation started")
     if not os.getenv("GOLD_PATH"):
@@ -28,6 +40,10 @@ def engineer():
     try:
         df = pl.read_delta(os.getenv("SILVER_PATH"))
         df = create_sentiment_label(df)
+        df = create_text_length(df, "title")
+        df = create_text_length(df, "text")
+        df = create_word_count(df, "title")
+        df = create_word_count(df, "text")
         df.write_delta(
             os.getenv("GOLD_PATH"),
             mode="overwrite",
