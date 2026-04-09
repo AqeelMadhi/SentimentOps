@@ -40,7 +40,7 @@ sentimentops/
 
 | Layer | Tools |
 |---|---|
-| Data Engineering | DuckDB, Polars, Delta Lake, DVC, Great Expectations|
+| Data Engineering | DuckDB, Polars, Delta Lake, DVC, Pandera |
 | Modelling | DistilBERT, scikit-learn, Optuna, SHAP, MLflow |
 | MLOps | MLflow, Azure ML, GitHub Actions, Docker |
 | Serving | FastAPI, Redis, Prometheus, Grafana, Render |
