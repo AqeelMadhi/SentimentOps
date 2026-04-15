@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 from loguru import logger
 
 from pipelines.constants import ACCEPTABLE_DATA_LOSS_THRESHOLD
-
+from pipelines.silver_validation import SilverSchema
 load_dotenv()
 
 
@@ -79,6 +79,8 @@ def transform() -> None:
         df = convert_data_types(df)
         df = basic_text_cleaning(df)
         df = delete_unnecessary_columns(df, unnecessary_columns_to_drop)
+        SilverSchema.validate(df)
+        logger.info(f"Successfully validated silver schema")
         df.write_delta(
             os.getenv("SILVER_PATH"),
             mode="overwrite",

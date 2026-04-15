@@ -25,7 +25,7 @@ We adopt the **Medallion Architecture** with three distinct layers: Bronze, Silv
 - Produced by applying cleaning transforms to Bronze
 - Removes duplicates, handles nulls, standardises data types
 - Schema is enforced and documented
-- Great Expectations validation runs at this layer to assert data quality contracts
+- Pandera schema validation runs at this layer to assert data quality contracts (see ADR 005)
 - Format: Delta Lake table
 - Purpose: a reliable, clean dataset that any downstream consumer can trust
 
@@ -53,5 +53,5 @@ We adopt the **Medallion Architecture** with three distinct layers: Bronze, Silv
 ## Consequences
 - Three separate Delta tables: `data/bronze/`, `data/silver/`, `data/gold/`
 - Each layer has its own pipeline script in `pipelines/`
-- Great Expectations validation suite runs between Silver and Gold
+- Pandera validation runs on the Silver layer before writing (see ADR 005)
 - DVC tracks each layer independently for versioning
